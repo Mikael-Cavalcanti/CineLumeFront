@@ -1,5 +1,6 @@
 import {AuthRepository} from "@/services/auth/auth.repository";
 import {AuthBaseDTO, RegisterDTO} from "@/interfaces/auth";
+import {MailDTO} from "@/interfaces/mail";
 
 export class AuthService {
     private repository: AuthRepository;

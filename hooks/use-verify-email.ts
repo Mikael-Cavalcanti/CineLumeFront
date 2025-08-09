@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import {MailService} from "@/services/mail/mail.service";
 
 export const useVerifyEmail = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
+    const mailService = new MailService()
     const [code, setCode] = useState(["", "", "", "", "", ""])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -32,7 +34,6 @@ export const useVerifyEmail = () => {
             newCode[index] = value
             setCode(newCode)
 
-            // Auto-focus next input
             if (value && index < 5) {
                 const nextInput = document.getElementById(`code-${index + 1}`)
                 nextInput?.focus()
@@ -79,8 +80,7 @@ export const useVerifyEmail = () => {
         setError(null)
         
         try {
-            // Aqui você implementaria a chamada para reenviar o email
-            // await AuthService.resendVerificationEmail(email)
+            await mailService.resendEmail(email)
             
             // Reinicia o countdown
             setCountdown(30)
@@ -106,11 +106,11 @@ export const useVerifyEmail = () => {
         setError(null)
 
         try {
-            // Aqui você implementaria a verificação do código
-            // await AuthService.verifyEmail(email, fullCode)
+
+            await mailService.verifyEmail({ email, code: fullCode })
             
             console.log('Código verificado:', fullCode, 'para email:', email)
-            router.push('/dashboard')
+            router.push('/profiles')
         } catch (err: any) {
             setError(err?.message ?? 'Código inválido. Tente novamente.')
             // Limpa o código em caso de erro
