@@ -1,9 +1,18 @@
-import {RegisterDTO} from "@/interfaces/auth";
-import {api} from "@/lib/api";
+import {AuthRepository} from "@/services/auth/auth.repository";
+import {AuthBaseDTO, RegisterDTO} from "@/interfaces/auth";
 
-export const AuthService = {
-    async register(payload: RegisterDTO) {
-        const {data} = await api.post('/auth/register', payload)
-        return data as { message: string }
-    },
+export class AuthService {
+    private repository: AuthRepository;
+
+    constructor() {
+        this.repository = new AuthRepository();
+    }
+
+    async register(dto: RegisterDTO): Promise<{ message: string }> {
+        return this.repository.register(dto);
+    }
+
+    async login(dto: AuthBaseDTO): Promise<{ verified: boolean }> {
+        return this.repository.login(dto);
+    }
 }

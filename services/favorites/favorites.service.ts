@@ -1,5 +1,5 @@
-import { BaseFavoriteDto, Favorite } from '../../interfaces/favorites';
 import { FavoritesRepository } from './favorites.repository';
+import {BaseFavoriteDto, Favorite} from "@/interfaces/favorites";
 
 export class FavoritesService {
   private repository: FavoritesRepository;
