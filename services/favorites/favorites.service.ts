@@ -1,5 +1,4 @@
-// src/services/favorites/favorites.service.ts
-import { CreateFavoriteDto, DeleteFavoriteDto, Favorite } from '../../interfaces/favorites';
+import { BaseFavoriteDto, Favorite } from '../../interfaces/favorites';
 import { FavoritesRepository } from './favorites.repository';
 
 export class FavoritesService {
@@ -9,11 +8,11 @@ export class FavoritesService {
     this.repository = new FavoritesRepository();
   }
 
-  async add(dto: CreateFavoriteDto): Promise<Favorite> {
+  async add(dto: BaseFavoriteDto): Promise<Favorite> {
     return this.repository.addFavorite(dto);
   }
 
-  async remove(dto: DeleteFavoriteDto): Promise<void> {
+  async remove(dto: BaseFavoriteDto): Promise<void> {
     return this.repository.removeFavorite(dto);
   }
 

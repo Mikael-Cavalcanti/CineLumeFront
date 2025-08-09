@@ -1,24 +1,23 @@
-// src/services/favorites/favorites.repository.ts
-import { api } from '../../lib/api';
-import { CreateFavoriteDto, DeleteFavoriteDto, Favorite } from '../../interfaces/favorites';
+import {api} from '../../lib/api';
+import {BaseFavoriteDto, Favorite} from '../../interfaces/favorites';
 
 export class FavoritesRepository {
-  async addFavorite(dto: CreateFavoriteDto): Promise<Favorite> {
-    const { data } = await api.post('/favorites', dto);
-    return data;
-  }
+    async addFavorite(dto: BaseFavoriteDto): Promise<Favorite> {
+        const {data} = await api.post('/favorites', dto);
+        return data;
+    }
 
-  async removeFavorite(dto: DeleteFavoriteDto): Promise<void> {
-    await api.delete('/favorites', { data: dto });
-  }
+    async removeFavorite(dto: BaseFavoriteDto): Promise<void> {
+        await api.delete('/favorites', {data: dto});
+    }
 
-  async listFavoritesByProfile(profileId: number): Promise<Favorite[]> {
-    const { data } = await api.get(`/favorites/${profileId}`);
-    return data;
-  }
+    async listFavoritesByProfile(profileId: number): Promise<Favorite[]> {
+        const {data} = await api.get(`/favorites/${profileId}`);
+        return data;
+    }
 
-  async isFavorite(profileId: number, videoId: number): Promise<boolean> {
-    const { data } = await api.get(`/favorites/${profileId}/${videoId}`);
-    return data.isFavorite;
-  }
+    async isFavorite(profileId: number, videoId: number): Promise<boolean> {
+        const {data} = await api.get(`/favorites/${profileId}/${videoId}`);
+        return data.isFavorite;
+    }
 }
