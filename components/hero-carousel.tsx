@@ -128,7 +128,7 @@ export function HeroCarousel() {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-full max-w-7xl mx-auto px-8">
           {/* Cards Container */}
-          <div className="relative h-[800px] flex items-center justify-left perspective-1000">
+          <div className="relative h-[800px] flex items-center justify-center perspective-1000">
             <AnimatePresence mode="wait">
               {featuredMovies.map((movie, index) => {
                 const style = getCardStyle(index)
@@ -159,7 +159,7 @@ export function HeroCarousel() {
                     onClick={() => !isActive && setCurrentIndex(index)}
                   >
                     <div
-                      className={`relative w-[900px] h-[500px] rounded-2xl overflow-hidden transition-all duration-500 ${isActive ? "shadow-2xl shadow-black/50" : "shadow-lg shadow-black/30"
+                      className={`relative w-[1200px] h-[500px] rounded-2xl overflow-hidden transition-all duration-500 ${isActive ? "shadow-2xl shadow-black/50" : "shadow-lg shadow-black/30"
                         }`}
                     >
                       {/* Movie Image */}
@@ -172,7 +172,7 @@ export function HeroCarousel() {
                       />
 
                       {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent/40 to-transparent" />
 
                       {/* Content */}
                       <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -246,7 +246,7 @@ export function HeroCarousel() {
       </div>
 
       {/* Background Blur Effect */}
-      <div className="z-10 absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0D0D0D] pointer-events-none" />
+      <div className="z-10 absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0D0D0D]/40 pointer-events-none" />
 
       {/* Slide Indicators */}
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3">

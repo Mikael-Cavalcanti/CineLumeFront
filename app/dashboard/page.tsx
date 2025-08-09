@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Play } from "lucide-react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useGenres } from "@/hooks/use-genre"
 
 const genres = ["Action", "Fantasy", "Sci-fi", "Terror", "Romance", "Documentary"]
 
@@ -49,7 +50,17 @@ const topMovies = [
 ]
 
 export default function DashboardPage() {
-  const [selectedGenre, setSelectedGenre] = useState("Action")
+  const {
+    genres,
+    selectedGenre,
+    setSelectedGenre,
+    videos,
+    loadingGenres,
+    loadingVideos,
+    error,
+  } = useGenres()
+
+  // const [selectedGenre, setSelectedGenre] = useState("Action")
   const genreScrollRef = useRef<HTMLDivElement>(null)
   const movieScrollRef = useRef<HTMLDivElement>(null)
   const continueWatchingScrollRef = useRef<HTMLDivElement>(null)
@@ -93,15 +104,15 @@ export default function DashboardPage() {
               >
                 {genres.map((genre) => (
                   <Button
-                    key={genre}
+                    key={genre.id}
                     onClick={() => setSelectedGenre(genre)}
                     className={`px-6 py-2 rounded-full whitespace-nowrap transition-colors shadow-sm flex-shrink-0 ${
-                      selectedGenre === genre
+                      selectedGenre?.id === genre.id
                         ? "bg-[#feb625] text-black hover:bg-[#feb625]/90"
                         : "bg-transparent border border-white text-white hover:bg-white/10"
                     }`}
                   >
-                    {genre}
+                    {genre.name}
                   </Button>
                 ))}
               </div>
