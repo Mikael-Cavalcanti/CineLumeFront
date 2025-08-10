@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { VerifyEmailForm } from "@/components/verify-email-form"
 
 export default function VerifyEmailPage() {
@@ -15,7 +16,9 @@ export default function VerifyEmailPage() {
         </div>
       </div>
 
-      <VerifyEmailForm />
+      <Suspense fallback={<div className="text-white">Carregando...</div>}>
+        <VerifyEmailForm />
+      </Suspense>
     </div>
   )
 }
