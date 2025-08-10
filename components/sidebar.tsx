@@ -10,7 +10,6 @@ import Play from "@/components/icons/play.svg"
 import { MdOutlineCalendarMonth } from "react-icons/md"
 import { cn } from "@/lib/utils"
 import { AuthService } from "@/services/auth/auth.service"
-import { removeAuthToken } from "@/lib/api"
 
 const mainNavigation = [
   { name: "Home", href: "/dashboard", icon: Home },
@@ -35,13 +34,10 @@ export function Sidebar() {
     try {
       console.log('Fazendo logout...')
       await authService.logout()
-      removeAuthToken()
       console.log('Logout realizado com sucesso')
       router.push('/login')
     } catch (error) {
       console.error('Erro no logout:', error)
-      // Even if logout fails, clear tokens and redirect
-      removeAuthToken()
       router.push('/login')
     }
   }
