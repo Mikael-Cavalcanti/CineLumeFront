@@ -9,23 +9,19 @@ import Image from "next/image"
 import { useLogin } from "@/hooks/use-login"
 
 const backgroundImages = [
-  "/jurassic-world-bg.png",
-  "/movie-detail-bg.png",
-  "/netflix-channel-bg.png",
-  "/main-dashboard-bg.png",
-  "/channels-bg.png",
+  "/placeholder.svg",
 ]
 
 export default function LoginPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const { 
-    email, 
-    password, 
-    loading, 
-    error, 
-    setEmail, 
-    setPassword, 
-    handleSubmit 
+  const {
+    email,
+    password,
+    loading,
+    error,
+    setEmail,
+    setPassword,
+    handleSubmit
   } = useLogin()
 
   useEffect(() => {

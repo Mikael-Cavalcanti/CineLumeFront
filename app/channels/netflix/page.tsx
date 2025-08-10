@@ -12,7 +12,7 @@ const featuredContent = [
     id: 1,
     title: "Jurassic World: Fallen Kingdom",
     logo: "/placeholder.svg?height=100&width=200",
-    background: "/netflix-channel-bg.png",
+    background: "/placeholder.svg?height=600&width=1200",
   },
   {
     id: 2,

@@ -18,7 +18,7 @@ const featuredMovies: Movie[] = [
     id: 1,
     title: "Jurassic World: Fallen Kingdom",
     subtitle: "Experience the thrill",
-    image: "/main-dashboard-bg.png",
+    image: "/placeholder.svg?height=600&width=1000",
   },
   {
     id: 2,
