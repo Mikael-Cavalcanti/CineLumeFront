@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import Image from "next/image"
+import { useLogin } from "@/hooks/use-login"
 
 const backgroundImages = [
   "/jurassic-world-bg.png",
@@ -17,6 +18,15 @@ const backgroundImages = [
 
 export default function LoginPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const { 
+    email, 
+    password, 
+    loading, 
+    error, 
+    setEmail, 
+    setPassword, 
+    handleSubmit 
+  } = useLogin()
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,8 +73,15 @@ export default function LoginPage() {
             <h2 className="text-3xl font-bold text-white">welcome back</h2>
           </div>
 
+          {/* Error message */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+              <p className="text-red-500 text-sm">{error}</p>
+            </div>
+          )}
+
           {/* Login form */}
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-[#c5c5c5] text-sm">
                 Email address
@@ -73,6 +90,9 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
                 className="bg-transparent border-[#787878] border-2 rounded-lg px-4 py-3 text-white placeholder:text-[#787878] focus:border-[#feb625] focus:ring-0 h-12"
               />
             </div>
@@ -85,6 +105,9 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
                 className="bg-transparent border-[#787878] border-2 rounded-lg px-4 py-3 text-white placeholder:text-[#787878] focus:border-[#feb625] focus:ring-0 h-12"
               />
             </div>
@@ -95,14 +118,17 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            <Link href="/profiles">
-              <Button
-                type="button"
-                className="w-full bg-[#feb625] hover:bg-[#feb625]/90 text-black font-semibold py-3 rounded-lg h-12 text-base"
-              >
-                Login
-              </Button>
-            </Link>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#feb625] hover:bg-[#feb625]/90 text-black font-semibold py-3 rounded-lg h-12 text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {loading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+              ) : (
+                'Login'
+              )}
+            </Button>
           </form>
 
           {/* Register link */}

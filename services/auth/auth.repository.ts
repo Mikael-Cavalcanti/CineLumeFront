@@ -7,7 +7,7 @@ export class AuthRepository {
         return data;
     }
 
-    async login(dto: AuthBaseDTO): Promise<{ verified: boolean }> {
+    async login(dto: AuthBaseDTO): Promise<{ verified: boolean, token?: string }> {
         const {data} = await api.post('/auth/login', dto);
         return data;
     }
