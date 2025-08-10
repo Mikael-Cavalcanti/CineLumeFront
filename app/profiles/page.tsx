@@ -55,7 +55,7 @@ export default function ProfilesPage() {
                             className="flex flex-col items-center space-y-4 cursor-pointer group"
                         >
                             <Avatar className="w-32 h-32 group-hover:ring-4 group-hover:ring-[#feb625] transition-all">
-                                <AvatarImage src={profile.avatarUrl || "/placeholder.svg"}/>
+                                <AvatarImage src={profile.avatarUrl || "/profiles/profile_1.png"}/>
                                 <AvatarFallback
                                     className="text-2xl bg-[#1d1d1d] text-white">{profile.name.charAt(0)}</AvatarFallback>
                             </Avatar>
