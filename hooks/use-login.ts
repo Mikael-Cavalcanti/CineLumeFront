@@ -10,6 +10,7 @@ export const useLogin = () => {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [success, setSuccess] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -34,6 +35,8 @@ export const useLogin = () => {
             console.log('Login response:', response)
             console.log('Cookies após login:', document.cookie)
             
+            setSuccess(true)
+            
             if (response.verified) {
                 router.push('/profiles')
             } else {
@@ -42,7 +45,6 @@ export const useLogin = () => {
         } catch (err: any) {
             console.error('Erro no login:', err)
             setError(err?.response?.data?.message || err?.message || 'Erro ao fazer login. Verifique suas credenciais.')
-        } finally {
             setLoading(false)
         }
     }
@@ -52,6 +54,7 @@ export const useLogin = () => {
         password,
         loading,
         error,
+        success,
         setEmail,
         setPassword,
         handleSubmit

@@ -9,6 +9,7 @@ export const VerifyEmailForm = () => {
         code,
         loading,
         error,
+        success,
         countdown,
         isResendDisabled,
         email,
@@ -78,7 +79,7 @@ export const VerifyEmailForm = () => {
             {/* Confirm Button */}
             <Button 
                 onClick={handleConfirmCode}
-                disabled={!isCodeComplete || loading}
+                disabled={!isCodeComplete || loading || success}
                 className="w-full bg-[#feb625] hover:bg-[#feb625]/90 text-black font-semibold h-12 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
                 {loading ? (

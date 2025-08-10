@@ -116,6 +116,7 @@ export const useVerifyEmail = () => {
             await mailService.verifyEmail({ email, code: fullCode })
 
             console.log('Código verificado:', fullCode, 'para email:', email)
+            setSuccess(true)
             router.push('/profiles')
         } catch (err: any) {
             setError(err?.message ?? 'Código inválido. Tente novamente.')
@@ -123,7 +124,6 @@ export const useVerifyEmail = () => {
             setCode(["", "", "", "", "", ""])
             const firstInput = document.getElementById('code-0')
             firstInput?.focus()
-        } finally {
             setLoading(false)
             isRequesting.current = false
         }
@@ -142,6 +142,7 @@ export const useVerifyEmail = () => {
         code,
         loading,
         error,
+        success,
         countdown,
         isResendDisabled,
         email,

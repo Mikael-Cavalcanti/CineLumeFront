@@ -2,12 +2,14 @@
 
 import {Button} from "@/components/ui/button"
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
-import {Plus, Loader2} from "lucide-react"
+import {Plus, Loader2, Edit2} from "lucide-react"
 import Link from "next/link"
 import {useProfiles} from "@/hooks/use-profiles"
+import { useState } from "react"
 
 export default function ProfilesPage() {
     const {profiles, loading, error, selectProfile} = useProfiles()
+    const [isManaging, setIsManaging] = useState(false)
 
     if (loading) {
         return (
@@ -51,14 +53,23 @@ export default function ProfilesPage() {
                     {profiles.map((profile) => (
                         <div
                             key={profile.id}
-                            onClick={() => selectProfile(profile.id)}
-                            className="flex flex-col items-center space-y-4 cursor-pointer group"
+                            onClick={() => !isManaging && selectProfile(profile.id)}
+                            className="flex flex-col items-center space-y-4 cursor-pointer group relative"
                         >
-                            <Avatar className="w-32 h-32 group-hover:ring-4 group-hover:ring-[#feb625] transition-all">
-                                <AvatarImage src={profile.avatarUrl || "/profiles/profile_2.png"}/>
-                                <AvatarFallback
-                                    className="text-2xl bg-[#1d1d1d] text-white">{profile.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
+                            <div className="relative">
+                                <Avatar className="w-32 h-32 group-hover:ring-4 group-hover:ring-[#feb625] transition-all">
+                                    <AvatarImage src={profile.avatarUrl || "/profiles/profile_2.png"}/>
+                                    <AvatarFallback
+                                        className="text-2xl bg-[#1d1d1d] text-white">{profile.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                {isManaging && (
+                                    <Link href={`/edit-profile?id=${profile.id}`}>
+                                        <button className="absolute -top-2 -right-2 w-10 h-10 bg-[#feb625] rounded-full flex items-center justify-center hover:bg-[#feb625]/90 transition-colors">
+                                            <Edit2 className="w-5 h-5 text-black" />
+                                        </button>
+                                    </Link>
+                                )}
+                            </div>
                             <span className="text-white text-lg font-medium">{profile.name}</span>
                             {profile.isKidProfile && (
                                 <span className="text-[#feb625] text-xs">KIDS</span>
@@ -81,9 +92,10 @@ export default function ProfilesPage() {
                 {/* Manage Profiles */}
                 <Button
                     variant="outline"
+                    onClick={() => setIsManaging(!isManaging)}
                     className="bg-transparent border-[#787878] text-[#787878] hover:bg-[#1d1d1d] hover:text-white px-8 py-3"
                 >
-                    MANAGE PROFILES
+                    {isManaging ? 'DONE' : 'MANAGE PROFILES'}
                 </Button>
             </div>
 

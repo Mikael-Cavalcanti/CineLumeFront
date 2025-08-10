@@ -14,6 +14,7 @@ export const RegisterForm = () => {
         birthDate,
         loading,
         error,
+        success,
         fieldErrors,
         handleNameChange,
         handleEmailChange,
@@ -129,8 +130,8 @@ export const RegisterForm = () => {
 
                 <Button
                     type="submit"
-                    disabled={loading}
-                    className="w-full bg-[#feb625] hover:bg-[#feb625]/90 text-black font-semibold py-3 rounded-lg h-12 text-base flex items-center justify-center"
+                    disabled={loading || success}
+                    className="w-full bg-[#feb625] hover:bg-[#feb625]/90 text-black font-semibold py-3 rounded-lg h-12 text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                     {loading ? (
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>

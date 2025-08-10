@@ -19,6 +19,7 @@ export default function LoginPage() {
     password,
     loading,
     error,
+    success,
     setEmail,
     setPassword,
     handleSubmit
@@ -116,7 +117,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={loading || success}
               className="w-full bg-[#feb625] hover:bg-[#feb625]/90 text-black font-semibold py-3 rounded-lg h-12 text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (

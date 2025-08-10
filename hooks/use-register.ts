@@ -21,6 +21,7 @@ export const useRegister = () => {
     const [birthDate, setBirthDate] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [success, setSuccess] = useState(false)
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
         name: '',
         email: '',
@@ -201,10 +202,10 @@ export const useRegister = () => {
             const authService = new AuthService()
             await authService.register({name, email, password, birthDate: isoBirthDate})
 
+            setSuccess(true)
             router.push(`/verify-email?email=${encodeURIComponent(email)}`)
         } catch (err: any) {
             setError(err?.message ?? 'Erro ao registrar. Tente novamente.')
-        } finally {
             setLoading(false)
         }
     }
@@ -218,6 +219,7 @@ export const useRegister = () => {
         birthDate,
         loading,
         error,
+        success,
         fieldErrors,
         // Handlers
         handleNameChange,

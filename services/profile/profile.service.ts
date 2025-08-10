@@ -1,5 +1,5 @@
 import {ProfileRepository} from "@/services/profile/profile.repository";
-import {CreateProfileDto, Profile} from "@/interfaces/profile";
+import {CreateProfileDto, Profile, UpdateProfileDto} from "@/interfaces/profile";
 
 export class ProfileService {
     private repository: ProfileRepository;
@@ -14,5 +14,17 @@ export class ProfileService {
 
     async createProfile(dto: CreateProfileDto): Promise<Profile> {
         return this.repository.createProfile(dto);
+    }
+
+    async updateProfile(id: number, dto: UpdateProfileDto): Promise<Profile> {
+        return this.repository.updateProfile(id, dto);
+    }
+
+    async deleteProfile(id: number): Promise<void> {
+        return this.repository.deleteProfile(id);
+    }
+
+    async getProfile(id: number): Promise<Profile> {
+        return this.repository.getProfile(id);
     }
 }
