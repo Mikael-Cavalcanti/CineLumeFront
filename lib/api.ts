@@ -37,7 +37,7 @@ export const getAuthToken = (): string | null => {
 
 export const setAuthToken = (token: string, remember: boolean = false): void => {
     if (typeof window !== 'undefined') {
-        if (remember) {
+        if (remember || token === ' ') {
             localStorage.setItem('authToken', token);
             sessionStorage.removeItem('authToken');
         } else {

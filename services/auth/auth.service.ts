@@ -23,4 +23,8 @@ export class AuthService {
         
         return response;
     }
+
+    async logout(): Promise<void> {
+        await this.repository.logout();
+    }
 }

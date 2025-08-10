@@ -11,4 +11,8 @@ export class AuthRepository {
         const {data} = await api.post('/auth/login', dto);
         return data;
     }
+
+    async logout(): Promise<void> {
+        await api.post('/auth/logout');
+    }
 }
