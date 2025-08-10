@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {MailService} from "@/services/mail/mail.service";
 
@@ -13,6 +13,7 @@ export const useVerifyEmail = () => {
     const [error, setError] = useState<string | null>(null)
     const [countdown, setCountdown] = useState(30)
     const [isResendDisabled, setIsResendDisabled] = useState(true)
+    const isRequesting = useRef(false)
 
     const email = searchParams?.get('email') || ''
 
@@ -74,41 +75,46 @@ export const useVerifyEmail = () => {
     }
 
     const handleResendEmail = useCallback(async () => {
-        if (isResendDisabled) return
+        if (isResendDisabled || isRequesting.current) return
 
+        isRequesting.current = true
         setLoading(true)
         setError(null)
-        
+
         try {
             await mailService.resendEmail(email)
-            
+
             // Reinicia o countdown
             setCountdown(30)
             setIsResendDisabled(true)
-            
+
             console.log('Email reenviado para:', email)
         } catch (err: any) {
             setError(err?.message ?? 'Erro ao reenviar email. Tente novamente.')
         } finally {
             setLoading(false)
+            isRequesting.current = false
         }
     }, [email, isResendDisabled])
 
     const handleConfirmCode = useCallback(async () => {
+        if (isRequesting.current) return
+
         const fullCode = code.join('')
-        
+
         if (fullCode.length !== 6) {
             setError('Por favor, digite o código completo de 6 dígitos')
             return
         }
 
+        isRequesting.current = true
         setLoading(true)
         setError(null)
 
         try {
 
             await mailService.verifyEmail({ email, code: fullCode })
-            
+
             console.log('Código verificado:', fullCode, 'para email:', email)
             router.push('/profiles')
         } catch (err: any) {
@@ -119,6 +125,7 @@ export const useVerifyEmail = () => {
             firstInput?.focus()
         } finally {
             setLoading(false)
+            isRequesting.current = false
         }
     }, [code, email, router])
 
