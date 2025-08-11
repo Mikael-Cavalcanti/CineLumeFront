@@ -20,7 +20,7 @@ export class ProfileService {
         return this.repository.updateProfile(id, dto);
     }
 
-    async deleteProfile(id: number): Promise<void> {
+    async deleteProfile(id: number): Promise<Profile> {
         return this.repository.deleteProfile(id);
     }
 

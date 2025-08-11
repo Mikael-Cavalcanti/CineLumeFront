@@ -18,8 +18,8 @@ export class ProfileRepository {
         return data;
     }
 
-    async deleteProfile(id: number): Promise<void> {
-        await api.delete(`/profiles/${id}`);
+    async deleteProfile(id: number): Promise<Profile> {
+        return await api.delete(`/profiles/${id}`);
     }
 
     async getProfile(id: number): Promise<Profile> {
