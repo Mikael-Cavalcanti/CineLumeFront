@@ -8,7 +8,7 @@ export class MailRepository {
     }
 
     async resendEmail(email: string): Promise<{ message: string }> {
-        const {data} = await api.post(`/mail/resend-email${email}`);
+        const {data} = await api.post(`/mail/resend-email/${email}`);
         return data;
     }
 }
