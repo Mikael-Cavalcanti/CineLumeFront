@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import {useState, useEffect, useCallback, useRef} from 'react'
+import {useRouter, useSearchParams} from 'next/navigation'
 import {MailService} from "@/services/mail/mail.service";
 
 export const useVerifyEmail = () => {
@@ -30,7 +30,7 @@ export const useVerifyEmail = () => {
     }, [countdown, isResendDisabled])
 
     const handleCodeChange = (index: number, value: string) => {
-        if (value.length <= 1 && /^\d*$/.test(value)) { // Apenas números
+        if (value.length <= 1 && /^\d*$/.test(value)) {
             const newCode = [...code]
             newCode[index] = value
             setCode(newCode)
@@ -53,20 +53,20 @@ export const useVerifyEmail = () => {
     const handlePaste = (e: React.ClipboardEvent) => {
         e.preventDefault()
         const pastedData = e.clipboardData.getData('text')
-        
+
         // Remove caracteres não numéricos e limita a 6 dígitos
         const numbers = pastedData.replace(/\D/g, '').slice(0, 6)
-        
+
         if (numbers.length > 0) {
             // Cria array com os dígitos colados
             const newCode = ["", "", "", "", "", ""]
             for (let i = 0; i < numbers.length; i++) {
                 newCode[i] = numbers[i]
             }
-            
+
             setCode(newCode)
             setError(null) // Limpa qualquer erro anterior
-            
+
             // Foca no próximo campo vazio ou no último preenchido
             const nextEmptyIndex = Math.min(numbers.length, 5)
             const nextInput = document.getElementById(`code-${nextEmptyIndex}`)
@@ -84,7 +84,6 @@ export const useVerifyEmail = () => {
         try {
             await mailService.resendEmail(email)
 
-            // Reinicia o countdown
             setCountdown(30)
             setIsResendDisabled(true)
 
@@ -113,14 +112,12 @@ export const useVerifyEmail = () => {
 
         try {
 
-            await mailService.verifyEmail({ email, code: fullCode })
+            await mailService.verifyEmail({email, code: fullCode})
 
             console.log('Código verificado:', fullCode, 'para email:', email)
-            setSuccess(true)
             router.push('/profiles')
         } catch (err: any) {
             setError(err?.message ?? 'Código inválido. Tente novamente.')
-            // Limpa o código em caso de erro
             setCode(["", "", "", "", "", ""])
             const firstInput = document.getElementById('code-0')
             firstInput?.focus()
@@ -142,7 +139,6 @@ export const useVerifyEmail = () => {
         code,
         loading,
         error,
-        success,
         countdown,
         isResendDisabled,
         email,

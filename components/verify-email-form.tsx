@@ -1,15 +1,14 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useVerifyEmail } from "@/hooks/use-verify-email"
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+import {useVerifyEmail} from "@/hooks/use-verify-email"
 
 export const VerifyEmailForm = () => {
     const {
         code,
         loading,
         error,
-        success,
         countdown,
         isResendDisabled,
         email,
@@ -77,9 +76,9 @@ export const VerifyEmailForm = () => {
             </Button>
 
             {/* Confirm Button */}
-            <Button 
+            <Button
                 onClick={handleConfirmCode}
-                disabled={!isCodeComplete || loading || success}
+                disabled={!isCodeComplete || loading}
                 className="w-full bg-[#feb625] hover:bg-[#feb625]/90 text-black font-semibold h-12 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
                 {loading ? (

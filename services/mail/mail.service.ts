@@ -1,4 +1,5 @@
 import {MailRepository} from "@/services/mail/mail.repository";
+import {MailDTO} from "@/interfaces/mail";
 
 export class MailService {
     private mailRepository: MailRepository;
@@ -7,11 +8,11 @@ export class MailService {
         this.mailRepository = new MailRepository();
     }
 
-    async verifyEmail(dto: { email: string; code: string }): Promise<void> {
-        await this.mailRepository.verifyEmail(dto);
+    async verifyEmail(dto: MailDTO): Promise<{ message: string }> {
+        return this.mailRepository.verifyEmail(dto);
     }
 
-    async resendEmail(email: string): Promise<void> {
+    async resendEmail(email: string): Promise<{ message: string }> {
         return this.mailRepository.resendEmail(email);
     }
 }

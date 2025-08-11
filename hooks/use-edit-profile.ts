@@ -1,21 +1,21 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ProfileService } from '@/services/profile/profile.service'
-import { Profile, UpdateProfileDto } from '@/interfaces/profile'
+import {useState, useEffect, useCallback} from 'react'
+import {useRouter, useSearchParams} from 'next/navigation'
+import {ProfileService} from '@/services/profile/profile.service'
+import {Profile, UpdateProfileDto} from '@/interfaces/profile'
 
 export const useEditProfile = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const profileService = new ProfileService()
-    
+
     const profileId = searchParams?.get('id')
-    
+
     const [profile, setProfile] = useState<Profile | null>(null)
-    const [name, setName] = useState('')
-    const [isKidProfile, setIsKidProfile] = useState(false)
-    const [avatarUrl, setAvatarUrl] = useState('')
+    const [name, setName] = useState<string>('')
+    const [isKidProfile, setIsKidProfile] = useState<boolean>(false)
+    const [avatarUrl, setAvatarUrl] = useState<string>('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
@@ -32,7 +32,7 @@ export const useEditProfile = () => {
 
     const fetchProfile = async () => {
         if (!profileId) return
-        
+
         try {
             setFetchingProfile(true)
             setError(null)

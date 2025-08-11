@@ -8,12 +8,16 @@ export class ProfileService {
         this.repository = new ProfileRepository();
     }
 
+    async createProfile(dto: CreateProfileDto): Promise<Profile> {
+        return this.repository.createProfile(dto);
+    }
+
     async getProfiles(): Promise<Profile[]> {
         return this.repository.getProfiles();
     }
 
-    async createProfile(dto: CreateProfileDto): Promise<Profile> {
-        return this.repository.createProfile(dto);
+    async getProfile(id: number): Promise<Profile> {
+        return this.repository.getProfile(id);
     }
 
     async updateProfile(id: number, dto: UpdateProfileDto): Promise<Profile> {
@@ -22,9 +26,5 @@ export class ProfileService {
 
     async deleteProfile(id: number): Promise<Profile> {
         return this.repository.deleteProfile(id);
-    }
-
-    async getProfile(id: number): Promise<Profile> {
-        return this.repository.getProfile(id);
     }
 }

@@ -13,7 +13,7 @@ export class UserRepository {
     }
 
     async deleteMe(): Promise<{ name: string }> {
-        const data: User = await api.delete('/user/delete/me');
-        return {name: data.name};
+        const {data} = await api.delete('/user/delete/me');
+        return data;
     }
 }
