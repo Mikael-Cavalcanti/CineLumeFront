@@ -10,6 +10,19 @@ export const useProfiles = () => {
     const [error, setError] = useState<string | null>(null)
     const profileService = new ProfileService()
 
+    const availableAvatars = [
+        '/profiles/profile_1.png',
+        '/profiles/profile_2.png',
+        '/profiles/Profile_3.png',
+        '/profiles/profile_4.png',
+        '/profiles/profile_5.png'
+    ]
+
+    const getRandomAvatar = () => {
+        const randomIndex = Math.floor(Math.random() * availableAvatars.length)
+        return availableAvatars[randomIndex]
+    }
+
     useEffect(() => {
         fetchProfiles()
     }, [])
@@ -28,7 +41,28 @@ export const useProfiles = () => {
             
             const data = await profileService.getProfiles()
             console.log('Profiles recebidos:', data)
-            setProfiles(data)
+            
+            // Update profiles without avatars with random images
+            const updatedProfiles = await Promise.all(
+                data.map(async (profile) => {
+                    if (!profile.avatarUrl) {
+                        try {
+                            const randomAvatar = getRandomAvatar()
+                            const updatedProfile = await profileService.updateProfile(profile.id, {
+                                avatarUrl: randomAvatar
+                            })
+                            console.log(`Avatar atualizado para perfil ${profile.name}: ${randomAvatar}`)
+                            return updatedProfile
+                        } catch (err) {
+                            console.error(`Erro ao atualizar avatar do perfil ${profile.name}:`, err)
+                            return profile
+                        }
+                    }
+                    return profile
+                })
+            )
+            
+            setProfiles(updatedProfiles)
         } catch (err: any) {
             console.error('Erro ao buscar profiles:', err)
             console.error('Status da resposta:', err?.response?.status)
