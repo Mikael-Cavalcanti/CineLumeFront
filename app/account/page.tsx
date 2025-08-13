@@ -1,10 +1,14 @@
+"use client"
+
 import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Trash2 } from "lucide-react"
+import { useAccount } from "@/hooks/use-account"
 
 export default function AccountPage() {
+  const { isDeleting, error, handleDeleteAccount } = useAccount()
   return (
     <div className="min-h-screen bg-[#0c0c0c]">
       <Sidebar />
@@ -68,9 +72,19 @@ export default function AccountPage() {
 
             {/* Delete Account */}
             <div className="pt-8">
-              <Button variant="outline" className="border-red-500 text-red-500 hover:bg-red-500/10 px-6 py-3">
+              {error && (
+                <div className="mb-4 p-3 bg-red-500/10 border border-red-500 rounded text-red-500 text-sm">
+                  {error}
+                </div>
+              )}
+              <Button 
+                onClick={handleDeleteAccount}
+                disabled={isDeleting}
+                variant="outline" 
+                className="border-red-500 text-red-500 hover:bg-red-500/10 px-6 py-3 disabled:opacity-50"
+              >
                 <Trash2 className="w-4 h-4 mr-2" />
-                Delete Account
+                {isDeleting ? "Deleting..." : "Delete Account"}
               </Button>
             </div>
           </div>

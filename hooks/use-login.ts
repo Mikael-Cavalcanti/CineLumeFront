@@ -33,6 +33,7 @@ export const useLogin = () => {
             const response = await authService.login({ email, password })
             
             console.log('Login response:', response)
+            console.log('Login verified:', response.verified)
             console.log('Cookies após login:', document.cookie)
             
             setSuccess(true)

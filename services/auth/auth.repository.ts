@@ -3,11 +3,13 @@ import {api} from "@/lib/api";
 
 export class AuthRepository {
     async register(dto: RegisterDTO): Promise<{ message: string }> {
-        return await api.post('/auth/register', dto);
+        const response = await api.post('/auth/register', dto);
+        return response.data;
     }
 
     async login(dto: AuthBaseDTO): Promise<{ verified: boolean }> {
-        return await api.post('/auth/login', dto);
+        const response = await api.post('/auth/login', dto);
+        return response.data;
     }
 
     async logout(): Promise<void> {
