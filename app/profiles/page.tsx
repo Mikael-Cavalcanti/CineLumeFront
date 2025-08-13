@@ -84,7 +84,7 @@ export default function ProfilesPage() {
                                 className="w-32 h-32 rounded-full bg-[#1d1d1d] flex items-center justify-center group-hover:bg-[#feb625] transition-colors">
                                 <Plus className="w-12 h-12 text-[#787878] group-hover:text-black"/>
                             </div>
-                            <span className="text-[#787878] text-lg font-medium">Add Profile</span>
+                            <span className="text-[#787878] text-lg font-medium group-hover:text-white transition-colors">Add Profile</span>
                         </div>
                     </Link>
                 </div>
@@ -93,7 +93,7 @@ export default function ProfilesPage() {
                 <Button
                     variant="outline"
                     onClick={() => setIsManaging(!isManaging)}
-                    className="bg-transparent border-[#787878] text-[#787878] hover:bg-[#1d1d1d] hover:text-white px-8 py-3"
+                    className="bg-transparent border-[#787878] text-[#787878] hover:bg-[#feb625]/10 hover:border-[#feb625] hover:text-[#feb625] px-8 py-3 transition-all"
                 >
                     {isManaging ? 'DONE' : 'MANAGE PROFILES'}
                 </Button>

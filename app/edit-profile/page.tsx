@@ -6,7 +6,7 @@ import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Checkbox} from "@/components/ui/checkbox"
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
-import {Edit, Loader2} from "lucide-react"
+import {Edit, Loader2, X} from "lucide-react"
 import {useEditProfile} from "@/hooks/use-edit-profile"
 
 function EditProfileContent() {
@@ -24,7 +24,12 @@ function EditProfileContent() {
         handleSave,
         handleDelete,
         handleCancel,
-        isEditing
+        isEditing,
+        isAvatarPopupOpen,
+        availableAvatars,
+        openAvatarPopup,
+        closeAvatarPopup,
+        selectAvatar
     } = useEditProfile()
 
     if (fetchingProfile) {
@@ -67,7 +72,9 @@ function EditProfileContent() {
                                 </AvatarFallback>
                             </Avatar>
                             <button
-                                className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#feb625] rounded-full flex items-center justify-center">
+                                onClick={openAvatarPopup}
+                                disabled={loading}
+                                className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#feb625] rounded-full flex items-center justify-center hover:bg-[#feb625]/90 transition-colors disabled:opacity-50">
                                 <Edit className="w-4 h-4 text-black"/>
                             </button>
                         </div>
@@ -105,7 +112,7 @@ function EditProfileContent() {
                         <Button
                             onClick={handleSave}
                             disabled={loading || !name.trim() || success}
-                            className="bg-white text-black hover:bg-white/90 px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            className="bg-white text-black hover:bg-[#feb625] hover:text-black border border-white hover:border-[#feb625] px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
                         >
                             {loading ? (
                                 <Loader2 className="w-4 h-4 animate-spin"/>
@@ -117,7 +124,7 @@ function EditProfileContent() {
                             onClick={handleCancel}
                             disabled={loading}
                             variant="outline"
-                            className="border-[#787878] text-white hover:bg-[#1d1d1d] px-8 py-3"
+                            className="border-[#787878] text-[#787878] hover:bg-[#1d1d1d] hover:text-white hover:border-white px-8 py-3 transition-colors"
                         >
                             Cancel
                         </Button>
@@ -126,7 +133,7 @@ function EditProfileContent() {
                                 onClick={handleDelete}
                                 disabled={loading || success}
                                 variant="outline"
-                                className="border-red-500 text-red-500 hover:bg-red-500/10 px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="border-red-500 text-red-500 hover:bg-red-500/20 hover:border-red-400 hover:text-red-400 px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 Delete profile
                             </Button>
@@ -134,6 +141,43 @@ function EditProfileContent() {
                     </div>
                 </div>
             </div>
+
+            {/* Avatar Selection Popup */}
+            {isAvatarPopupOpen && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-[#0c0c0c] border border-[#1d1d1d] rounded-lg p-6 max-w-md w-full mx-4">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold text-white">Choose Avatar</h3>
+                            <button
+                                onClick={closeAvatarPopup}
+                                className="text-[#787878] hover:text-white transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+                        
+                        <div className="grid grid-cols-3 gap-4">
+                            {availableAvatars.map((avatar, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => selectAvatar(avatar)}
+                                    className="group relative"
+                                >
+                                    <Avatar className="w-16 h-16 group-hover:ring-2 group-hover:ring-[#feb625] transition-all">
+                                        <AvatarImage src={avatar} />
+                                        <AvatarFallback className="bg-[#1d1d1d] text-white">
+                                            {index + 1}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    {avatarUrl === avatar && (
+                                        <div className="absolute inset-0 bg-[#feb625]/20 rounded-full ring-2 ring-[#feb625]"></div>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Logo bottom right */}
             <div className="absolute bottom-8 right-8">

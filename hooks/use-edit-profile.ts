@@ -20,6 +20,15 @@ export const useEditProfile = () => {
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
     const [fetchingProfile, setFetchingProfile] = useState(true)
+    const [isAvatarPopupOpen, setIsAvatarPopupOpen] = useState(false)
+
+    const availableAvatars = [
+        '/profiles/profile_1.png',
+        '/profiles/profile_2.png',
+        '/profiles/Profile_3.png',
+        '/profiles/profile_4.png',
+        '/profiles/profile_5.png'
+    ]
 
     // Fetch profile data if editing existing profile
     useEffect(() => {
@@ -105,6 +114,19 @@ export const useEditProfile = () => {
         router.push('/profiles')
     }
 
+    const openAvatarPopup = () => {
+        setIsAvatarPopupOpen(true)
+    }
+
+    const closeAvatarPopup = () => {
+        setIsAvatarPopupOpen(false)
+    }
+
+    const selectAvatar = (avatarPath: string) => {
+        setAvatarUrl(avatarPath)
+        setIsAvatarPopupOpen(false)
+    }
+
     return {
         profile,
         name,
@@ -120,6 +142,11 @@ export const useEditProfile = () => {
         handleSave,
         handleDelete,
         handleCancel,
-        isEditing: !!profileId
+        isEditing: !!profileId,
+        isAvatarPopupOpen,
+        availableAvatars,
+        openAvatarPopup,
+        closeAvatarPopup,
+        selectAvatar
     }
 }
