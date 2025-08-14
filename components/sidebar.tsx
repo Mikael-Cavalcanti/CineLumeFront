@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation"
 import { CiStar } from "react-icons/ci"
 import { Home, Film,Settings, LogOut } from "lucide-react"
 import Play from "@/components/icons/play.svg"
-import { MdOutlineCalendarMonth } from "react-icons/md"
 import { cn } from "@/lib/utils"
 import { AuthService } from "@/services/auth/auth.service"
 import Image from "next/image"
@@ -69,10 +68,10 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "p-3 rounded-lg transition-all duration-200 group relative",
+                "p-3 rounded-lg transition-all duration-300 group relative transform",
                 isActive
-                  ? "bg-[#feb625] text-black shadow-lg"
-                  : "text-[#787878] hover:text-white hover:bg-[#1d1d1d] hover:scale-110",
+                  ? "bg-[#feb625] text-black shadow-lg scale-105"
+                  : "text-[#787878] hover:text-white hover:bg-[#1d1d1d] hover:scale-110 hover:shadow-md bg-transparent hover:bg-gradient-to-r hover:from-[#1d1d1d] hover:to-[#2d2d2d]",
               )}
               title={item.name}
             >
@@ -122,10 +121,10 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "p-3 rounded-lg transition-all duration-200 group relative",
+                "p-3 rounded-lg transition-all duration-300 group relative transform",
                 isActive
-                  ? "bg-[#feb625] text-black shadow-lg"
-                  : "text-[#787878] hover:text-white hover:bg-[#1d1d1d] hover:scale-110",
+                  ? "bg-[#feb625] text-black shadow-lg scale-105"
+                  : "text-[#787878] hover:text-white hover:bg-[#1d1d1d] hover:scale-110 hover:shadow-md bg-transparent hover:bg-gradient-to-r hover:from-[#1d1d1d] hover:to-[#2d2d2d]",
               )}
               title={item.name}
             >

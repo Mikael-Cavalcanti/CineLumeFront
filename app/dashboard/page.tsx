@@ -11,6 +11,7 @@ import { Play } from "lucide-react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useGenres } from "@/hooks/use-genre"
+import { useDashboard } from "@/hooks/use-dashboard"
 
 
 const moviesByGenre = [
@@ -59,6 +60,8 @@ export default function DashboardPage() {
     loadingVideos,
     error,
   } = useGenres()
+  
+  const { profileId } = useDashboard()
 
   // const [selectedGenre, setSelectedGenre] = useState("Action")
   const genreScrollRef = useRef<HTMLDivElement>(null)
@@ -132,12 +135,6 @@ export default function DashboardPage() {
               </button>
             </div>
 
-            {/* Fixed "See more" Button */}
-            <div className="flex-shrink-0">
-              <Button className="bg-transparent border border-white text-white hover:bg-white/10 px-6 py-2 rounded-full whitespace-nowrap shadow-sm">
-                See more
-              </Button>
-            </div>
           </div>
 
           {/* Movie Cards by Genre */}

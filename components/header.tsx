@@ -2,17 +2,48 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { Search, Bell, X } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ProfileService } from "@/services/profile/profile.service"
+import { Profile } from "@/interfaces/profile"
 
 export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
   const router = useRouter()
+  const pathname = usePathname()
+  const profileService = new ProfileService()
+
+  useEffect(() => {
+    const fetchSelectedProfile = async () => {
+      try {
+        const selectedProfileId = localStorage.getItem('selectedProfileId')
+        if (selectedProfileId) {
+          const profileData = await profileService.getProfile(parseInt(selectedProfileId))
+          setSelectedProfile(profileData)
+        }
+      } catch (error) {
+        console.error('Error fetching selected profile:', error)
+      }
+    }
+
+    fetchSelectedProfile()
+  }, [])
+
+  const handleAvatarClick = () => {
+    if (pathname === '/account') {
+      // If already on account page, go back to previous page
+      router.back()
+    } else {
+      // Navigate to account page
+      router.push('/account')
+    }
+  }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -94,9 +125,21 @@ export function Header() {
         </Button>
 
         {/* User Avatar */}
-        <Avatar className="w-8 h-8 cursor-pointer ring-2 ring-transparent hover:ring-[#feb625] transition-all duration-200">
-          <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User avatar" />
-          <AvatarFallback className="bg-[#1d1d1d] text-white text-sm">U</AvatarFallback>
+        <Avatar 
+          onClick={handleAvatarClick}
+          className={`w-8 h-8 cursor-pointer ring-2 transition-all duration-200 ${
+            pathname === '/account' 
+              ? 'ring-[#feb625]' 
+              : 'ring-transparent hover:ring-[#feb625]'
+          }`}
+        >
+          <AvatarImage 
+            src={selectedProfile?.avatarUrl || "/profiles/profile_2.png"} 
+            alt="Profile avatar" 
+          />
+          <AvatarFallback className="bg-[#1d1d1d] text-white text-sm">
+            {selectedProfile?.name?.charAt(0)?.toUpperCase() || 'U'}
+          </AvatarFallback>
         </Avatar>
       </div>
     </header>
