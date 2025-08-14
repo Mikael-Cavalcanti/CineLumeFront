@@ -3,12 +3,14 @@
 import {useState, useEffect, useCallback} from 'react'
 import {useRouter, useSearchParams} from 'next/navigation'
 import {ProfileService} from '@/services/profile/profile.service'
-import {Profile, UpdateProfileDto} from '@/interfaces/profile'
+import {Profile, UpdateProfileDto, CreateProfileDto} from '@/interfaces/profile'
+import {UserService} from '@/services/user/user.service'
 
 export const useEditProfile = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const profileService = new ProfileService()
+    const userService = new UserService()
 
     const profileId = searchParams?.get('id')
 
@@ -30,11 +32,12 @@ export const useEditProfile = () => {
         '/profiles/profile_5.png'
     ]
 
-    // Fetch profile data if editing existing profile
+    // Fetch profile data if editing existing profile, set default avatar for new profile
     useEffect(() => {
         if (profileId) {
             fetchProfile()
         } else {
+            setAvatarUrl('/profiles/profile_2.png')
             setFetchingProfile(false)
         }
     }, [profileId])
@@ -63,22 +66,30 @@ export const useEditProfile = () => {
             return
         }
 
-        if (!profileId) {
-            setError('ID do profile não encontrado')
-            return
-        }
-
         setLoading(true)
         setError(null)
 
         try {
-            const updateData: UpdateProfileDto = {
-                name: name.trim(),
-                isKidProfile,
-                avatarUrl: avatarUrl || undefined
+            if (profileId) {
+                // Update existing profile
+                const updateData: UpdateProfileDto = {
+                    name: name.trim(),
+                    isKidProfile,
+                    avatarUrl: avatarUrl || undefined
+                }
+                await profileService.updateProfile(parseInt(profileId), updateData)
+            } else {
+                // Create new profile - get user info first
+                const user = await userService.getMe()
+                const createData: CreateProfileDto = {
+                    userId: user.id,
+                    name: name.trim(),
+                    isKidProfile,
+                    ...(avatarUrl && { avatarUrl })
+                }
+                await profileService.createProfile(createData)
             }
-
-            await profileService.updateProfile(parseInt(profileId), updateData)
+            
             setSuccess(true)
             router.push('/profiles')
         } catch (err: any) {

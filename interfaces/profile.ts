@@ -2,6 +2,7 @@ export interface CreateProfileDto {
     name: string;
     avatarUrl?: string;
     isKidProfile: boolean;
+    userId: number;
 }
 
 export interface UpdateProfileDto extends Partial<CreateProfileDto> {
