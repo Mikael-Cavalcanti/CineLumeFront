@@ -71,7 +71,7 @@ export default function ProfilesPage() {
                                 )}
                             </div>
                             <span className="text-white text-lg font-medium">{profile.name}</span>
-                            {profile.isKidProfile && (
+                            {profile.isKidsProfile && (
                                 <span className="text-[#feb625] text-xs">KIDS</span>
                             )}
                         </div>

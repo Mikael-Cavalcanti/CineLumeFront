@@ -12,5 +12,5 @@ export interface Profile {
     name: string;
     userId: number;
     avatarUrl?: string;
-    isKidProfile: boolean;
+    isKidsProfile: boolean;
 }

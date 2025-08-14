@@ -48,7 +48,7 @@ export const useEditProfile = () => {
             const data = await profileService.getProfile(parseInt(profileId))
             setProfile(data)
             setName(data.name)
-            setIsKidProfile(data.isKidProfile)
+            setIsKidProfile(data.isKidsProfile)
             setAvatarUrl(data.avatarUrl || '')
         } catch (err: any) {
             setError(err?.response?.data?.message || err?.message || 'Erro ao carregar profile')
