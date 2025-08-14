@@ -2,19 +2,19 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Settings, LogOut } from "lucide-react"
 import { CiStar } from "react-icons/ci"
-import Filmstrip from "@/components/icons/filmstrip.svg"
-import Home from "@/components/icons/home.svg"
+import { Home, Film,Settings, LogOut } from "lucide-react"
 import Play from "@/components/icons/play.svg"
 import { cn } from "@/lib/utils"
 import { AuthService } from "@/services/auth/auth.service"
+import Image from "next/image"
+
 
 const mainNavigation = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Favorites", href: "/favorites", icon: CiStar },
-  { name: "Catalog", href: "/recently-watched", icon: Filmstrip },
-  { name: "Play", href: "/channels", icon: Play },
+  { name: "Recently", href: "/recently-watched", icon: Film },
+  { name: "Channels", href: "/channels", icon: Play },
 ]
 
 const bottomUtilities = [
@@ -46,8 +46,15 @@ export function Sidebar() {
       <div className="flex-shrink-0">
         {/* Logo */}
         <Link href="/dashboard" className="block">
-          <div className="w-10 h-10 bg-[#feb625] rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-200">
-            <span className="text-black font-bold text-lg">C</span>
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-200">
+            <span className="text-black font-bold text-lg">
+              <Image
+                src="/cinelume-logo.png"
+                alt="Logo"
+                fill
+                className="w-10 h-10"
+              />
+            </span>
           </div>
         </Link>
       </div>
@@ -84,7 +91,7 @@ export function Sidebar() {
       <div className="flex flex-col space-y-4 flex-shrink-0">
         {bottomUtilities.map((item) => {
           const isActive = pathname === item.href
-          
+
           // Handle logout differently
           if (item.isLogout) {
             return (
@@ -107,7 +114,7 @@ export function Sidebar() {
               </button>
             )
           }
-          
+
           // Regular navigation item
           return (
             <Link

@@ -16,33 +16,33 @@ interface Movie {
 const featuredMovies: Movie[] = [
   {
     id: 1,
-    title: "Jurassic World: Fallen Kingdom",
-    subtitle: "Experience the thrill",
-    image: "/placeholder.svg?height=600&width=1000",
+    title: "Superman",
+    subtitle: "Look Up",
+    image: "https://image.tmdb.org/t/p/original/aJDLz1748CIMZkCkyISYe5Hl6I7.jpg",
   },
   {
     id: 2,
-    title: "Avatar: The Way of Water",
-    subtitle: "Return to Pandora",
-    image: "/placeholder.svg?height=600&width=1000",
+    title: "Ballerina",
+    subtitle: "From the same universe of Jhon Wick",
+    image: "https://image.tmdb.org/t/p/original/1yktYsxkmUtUFTUnCAUaqG6FEiz.jpg",
   },
   {
     id: 3,
-    title: "Top Gun: Maverick",
-    subtitle: "Feel the need for speed",
-    image: "/placeholder.svg?height=600&width=1000",
+    title: "Mission: Impossible 7",
+    subtitle: "The Final Reckoning",
+    image: "https://image.tmdb.org/t/p/original/xOuhhbQ3Nzznt5MjRdLBJb0CmDE.jpg",
   },
   {
     id: 4,
-    title: "Black Panther: Wakanda Forever",
-    subtitle: "Honor the legacy",
-    image: "/placeholder.svg?height=600&width=1000",
+    title: "The Accountant²",
+    subtitle: "",
+    image: "https://image.tmdb.org/t/p/original/abznrQ6EAxV7vZglaS5umsrTNOS.jpg",
   },
   {
     id: 5,
-    title: "Spider-Man: No Way Home",
-    subtitle: "The multiverse unleashed",
-    image: "/placeholder.svg?height=600&width=1000",
+    title: "Interstellar",
+    subtitle: "Facing the fisic problems",
+    image: "https://image.tmdb.org/t/p/original/xJHokMbljvjADYdit5fK5VQsXEG.jpg",
   },
 ]
 
