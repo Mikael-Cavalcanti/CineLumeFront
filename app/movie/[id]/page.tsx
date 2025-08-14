@@ -1,21 +1,53 @@
-import { ArrowLeft, Play, Heart } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import Link from "next/link"
-import Image from "next/image"
+"use client";
 
-const cast = [
-  { name: "Personagem", role: "Actor" },
-  { name: "Personagem", role: "Actor" },
-  { name: "Personagem", role: "Actor" },
-  { name: "Personagem", role: "Actor" },
-  { name: "Personagem", role: "Actor" },
-]
+import { useEffect, useState } from "react";
+import { ArrowLeft, Play, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
+import Image from "next/image";
+import { VideosService } from "@/services/video/video.service";
 
-export default function MovieDetailPage() {
+interface CastMember {
+  name: string;
+  role: string;
+  image?: string;
+}
+
+export default function MovieDetailPage({ params }: { params: { id: string } }) {
+  const [movie, setMovie] = useState<any | null>(null);
+  const [cast, setCast] = useState<CastMember[]>([]);
+
+  const videosService = new VideosService();
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const data = await videosService.findVideoById(+params.id); // método que retorna detalhes do filme
+        setMovie(data);
+
+        // Supondo que o cast venha como array dentro do filme
+        setCast(data.cast || []);
+      } catch (error) {
+        console.error("Erro ao carregar detalhes do filme:", error);
+      }
+    };
+    fetchMovie();
+  }, [params.id]);
+
+  if (!movie) {
+    return <div className="text-white p-6">Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-[#0c0c0c] relative">
-      <Image src="/movie-detail-bg.png" alt="Jurassic World" fill className="object-cover opacity-30" priority />
+      <Image
+        src={movie.background || "/movie-detail-bg.png"}
+        alt={movie.title}
+        fill
+        className="object-cover opacity-30"
+        priority
+      />
 
       <div className="relative z-10">
         {/* Header */}
@@ -31,20 +63,16 @@ export default function MovieDetailPage() {
           {/* Movie Info */}
           <div className="max-w-2xl space-y-6">
             <div>
-              <h1 className="text-5xl font-bold text-white mb-4">Jurassic World</h1>
+              <h1 className="text-5xl font-bold text-white mb-4">{movie.title}</h1>
               <div className="flex items-center space-x-4 text-[#c5c5c5] mb-6">
-                <span>2023</span>
-                <span>16</span>
-                <span>2h 13m</span>
-                <span>HD</span>
+                <span>{movie.year}</span>
+                <span>{movie.ageRating}</span>
+                <span>{movie.duration}</span>
+                <span>{movie.quality}</span>
               </div>
             </div>
 
-            <p className="text-white/80 text-lg leading-relaxed">
-              Lorem ipsum dolor sit amet consectetur. Viverra et condimentum tortor ipsum ut pharetra faucibus nunc sed.
-              Adipiscing posuere diam natoque vel libero nulla tellus dui. Et maecenas viverra in malesuada nec
-              facilisis ultrices pellentesque pellentesque. Varius facilisis cras quam in elementum leo.
-            </p>
+            <p className="text-white/80 text-lg leading-relaxed">{movie.description}</p>
 
             <div className="flex space-x-4">
               <Button className="bg-white text-black hover:bg-white/90 px-8 py-3">
@@ -63,11 +91,7 @@ export default function MovieDetailPage() {
             {/* Synopsis */}
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">Sinopse</h2>
-              <p className="text-white/80 leading-relaxed">
-                Lorem ipsum dolor sit amet consectetur. Viverra et condimentum tortor ipsum ut pharetra faucibus nunc
-                sed. Adipiscing posuere diam natoque vel libero nulla tellus dui. Et maecenas viverra in malesuada nec
-                facilisis ultrices pellentesque pellentesque. Varius facilisis cras quam in elementum leo.
-              </p>
+              <p className="text-white/80 leading-relaxed">{movie.description}</p>
             </div>
 
             {/* More Details */}
@@ -76,19 +100,19 @@ export default function MovieDetailPage() {
               <div className="space-y-4">
                 <div>
                   <span className="text-[#c5c5c5]">Categories:</span>
-                  <p className="text-white">Action, sci-fi, fantasy</p>
+                  <p className="text-white">{movie.categories?.join(", ")}</p>
                 </div>
                 <div>
                   <span className="text-[#c5c5c5]">Audio:</span>
-                  <p className="text-white">English, portuguese, japanese, russian</p>
+                  <p className="text-white">{movie.audio?.join(", ")}</p>
                 </div>
                 <div>
                   <span className="text-[#c5c5c5]">Subtitled:</span>
-                  <p className="text-white">English, portuguese, japanese, russian</p>
+                  <p className="text-white">{movie.subtitles?.join(", ")}</p>
                 </div>
                 <div>
                   <span className="text-[#c5c5c5]">Awards:</span>
-                  <p className="text-white">Oscar, best actor, best image</p>
+                  <p className="text-white">{movie.awards?.join(", ")}</p>
                 </div>
               </div>
             </div>
@@ -101,7 +125,7 @@ export default function MovieDetailPage() {
               {cast.map((actor, index) => (
                 <div key={index} className="flex-shrink-0 text-center">
                   <Avatar className="w-20 h-20 mb-3">
-                    <AvatarImage src="/placeholder.svg?height=80&width=80" />
+                    <AvatarImage src={actor.image || "/placeholder.svg"} />
                     <AvatarFallback className="bg-[#1d1d1d] text-white">{actor.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <p className="text-white font-medium">{actor.name}</p>
@@ -117,15 +141,15 @@ export default function MovieDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <h3 className="text-white font-semibold mb-2">Direction:</h3>
-                <p className="text-[#c5c5c5]">Name of the director</p>
+                <p className="text-[#c5c5c5]">{movie.director}</p>
               </div>
               <div>
                 <h3 className="text-white font-semibold mb-2">Script:</h3>
-                <p className="text-[#c5c5c5]">Name of the screenwriter</p>
+                <p className="text-[#c5c5c5]">{movie.script}</p>
               </div>
               <div>
                 <h3 className="text-white font-semibold mb-2">Production:</h3>
-                <p className="text-[#c5c5c5]">Name of the productors</p>
+                <p className="text-[#c5c5c5]">{movie.production}</p>
               </div>
             </div>
           </div>
@@ -164,5 +188,5 @@ export default function MovieDetailPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

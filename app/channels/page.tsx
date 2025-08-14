@@ -1,10 +1,13 @@
+"use client"
 import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-
+import { ChannelService } from "@/services/channel/channel.service";
+import { VideosService } from "@/services/video/video.service";
+import { useEffect, useState } from "react"
 const channels = [
   { name: "NETFLIX", logo: "N", color: "bg-red-600", slug: "netflix" },
   { name: "NBC", logo: "NBC", color: "bg-blue-600", slug: "nbc" },
@@ -20,7 +23,48 @@ const netflixContent = [
   { title: "Film title", image: "/placeholder.svg?height=200&width=300" },
 ]
 
+
 export default function ChannelsPage() {
+  const [channels, setChannels] = useState<any[]>([]);
+  const [selectedChannelSlug, setSelectedChannelSlug] = useState<string | null>(null);
+  const [videos, setVideos] = useState<any[]>([]);
+
+  const channelService = new ChannelService();
+  const videosService = new VideosService();
+
+  // Carregar canais
+  useEffect(() => {
+    const fetchChannels = async () => {
+      try {
+        const data = await channelService.getAllChannels();
+        setChannels(data);
+        if (data.length > 0) setSelectedChannelSlug(data[0].slug); // selecionar primeiro canal por padrão
+      } catch (error) {
+        console.error("Erro ao carregar canais:", error);
+      }
+    };
+    fetchChannels();
+  }, []);
+
+  // Carregar vídeos do canal selecionado
+  useEffect(() => {
+    if (!selectedChannelSlug) return;
+
+    const fetchVideos = async () => {
+      try {
+        const channel = channels.find(c => c.slug === selectedChannelSlug);
+        if (!channel) return;
+
+        // Buscar vídeos do canal usando seu service
+        const data = await videosService.findVideoByTitle(channel.name);
+        setVideos([data]); // Ajuste dependendo do retorno real do service
+      } catch (error) {
+        console.error("Erro ao carregar vídeos:", error);
+      }
+    };
+    fetchVideos();
+  }, [selectedChannelSlug, channels]);
+
   return (
     <div className="min-h-screen bg-[#0c0c0c]">
       <Sidebar />
@@ -36,14 +80,17 @@ export default function ChannelsPage() {
           {/* Channel Pills */}
           <div className="flex items-center space-x-4">
             {channels.map((channel) => (
-              <Link key={channel.name} href={`/channels/${channel.slug}`}>
-                <Button
-                  variant="outline"
-                  className="bg-white text-black hover:bg-white/90 px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105"
-                >
-                  {channel.name}
-                </Button>
-              </Link>
+              <Button
+                key={channel.slug}
+                onClick={() => setSelectedChannelSlug(channel.slug)}
+                variant="outline"
+                className={`px-6 py-3 rounded-full font-semibold transition-all duration-200 ${selectedChannelSlug === channel.slug
+                    ? "bg-white text-black"
+                    : "bg-transparent text-white border-[#787878]"
+                  }`}
+              >
+                {channel.name}
+              </Button>
             ))}
             <Button
               variant="outline"
@@ -53,35 +100,18 @@ export default function ChannelsPage() {
             </Button>
           </div>
 
-          {/* Netflix Section */}
+          {/* Vídeos do Canal Selecionado */}
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-white">Netflix</h2>
+            <h2 className="text-2xl font-bold text-white">
+              {selectedChannelSlug?.toUpperCase()}
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {netflixContent.map((item, index) => (
-                <Link key={index} href={`/movie/${index + 1}`} className="group cursor-pointer">
-                  <div className="space-y-2">
-                    <div className="aspect-video bg-[#1d1d1d] rounded-lg overflow-hidden">
-                      <Image
-                        src={item.image || "/placeholder.svg"}
-                        alt={item.title}
-                        width={300}
-                        height={200}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <p className="text-white font-medium">{item.title}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Prime Video Section */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-white">Prime Video</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {netflixContent.map((item, index) => (
-                <Link key={index} href={`/movie/${index + 5}`} className="group cursor-pointer">
+              {videos.map((item, index) => (
+                <Link
+                  key={index}
+                  href={`/movie/${item.id || index}`}
+                  className="group cursor-pointer"
+                >
                   <div className="space-y-2">
                     <div className="aspect-video bg-[#1d1d1d] rounded-lg overflow-hidden">
                       <Image
@@ -101,5 +131,5 @@ export default function ChannelsPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }

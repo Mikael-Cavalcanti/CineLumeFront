@@ -1,77 +1,30 @@
-import { Sidebar } from "@/components/sidebar"
-import { Header } from "@/components/header"
-import { Heart, Star } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+"use client";
 
-const recentlyWatched = [
-  {
-    id: 1,
-    title: "Jurassic World",
-    year: "2018",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: true,
-  },
-  {
-    id: 2,
-    title: "Jurassic World",
-    year: "2018",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: false,
-  },
-  {
-    id: 3,
-    title: "Film Name",
-    year: "2000",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: false,
-  },
-  {
-    id: 4,
-    title: "Film Name",
-    year: "2000",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: false,
-  },
-  {
-    id: 5,
-    title: "Film Name",
-    year: "2000",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: false,
-  },
-  {
-    id: 6,
-    title: "Film Name",
-    year: "2000",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: false,
-  },
-  {
-    id: 7,
-    title: "Film Name",
-    year: "2000",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: false,
-  },
-  {
-    id: 8,
-    title: "Film Name",
-    year: "2000",
-    rating: "4.9",
-    image: "/placeholder.svg?height=400&width=300",
-    isFavorite: false,
-  },
-]
+import { useEffect, useState } from "react";
+import { Sidebar } from "@/components/sidebar";
+import { Header } from "@/components/header";
+import { Heart, Star } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { RecentlyWatchedService } from "@/services/recently-watched/recentlyWatched.service";
 
-export default function RecentlyWatchedPage() {
+export default function RecentlyWatchedPage({ profileId }: { profileId: number }) {
+  const [recentlyWatched, setRecentlyWatched] = useState<any[]>([]);
+  const service = new RecentlyWatchedService();
+
+  useEffect(() => {
+    const fetchRecentlyWatched = async () => {
+      try {
+        const data = await service.getRecentlyWatched(profileId);
+        setRecentlyWatched(data);
+      } catch (error) {
+        console.error("Erro ao carregar filmes assistidos recentemente:", error);
+      }
+    };
+
+    fetchRecentlyWatched();
+  }, [profileId]);
+
   return (
     <div className="min-h-screen bg-[#0D0D0D]">
       <Sidebar />
@@ -82,7 +35,7 @@ export default function RecentlyWatchedPage() {
           {/* Header */}
           <div>
             <h1 className="text-4xl font-bold text-white mb-2">Recently watched</h1>
-            <p className="text-[#787878]">The films and series you see recently</p>
+            <p className="text-[#787878]">The films and series you saw recently</p>
           </div>
 
           {/* Movies Grid */}
@@ -119,5 +72,5 @@ export default function RecentlyWatchedPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }

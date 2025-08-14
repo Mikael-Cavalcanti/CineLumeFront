@@ -9,7 +9,9 @@ import Image from "next/image"
 import { useLogin } from "@/hooks/use-login"
 
 const backgroundImages = [
-  "/placeholder.svg",
+  "https://image.tmdb.org/t/p/original/42bJFgdRqZGI9WBjWPkdPnEaY75.jpg",
+  "https://image.tmdb.org/t/p/original/jzVbEzm5KEFWYWkWj2OU2gVUhpk.jpg",
+  "https://image.tmdb.org/t/p/original/5eN3QTjaBbBGoHHa0sSfuItvhm8.jpg"
 ]
 
 export default function LoginPage() {
