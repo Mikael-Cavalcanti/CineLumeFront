@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import Image from "next/image";
 import { VideosService } from "@/services/video/video.service";
+import { useNavigation } from "@/hooks/use-navigation";
+import { useMovieActions } from "@/hooks/use-movie-actions";
 
 interface CastMember {
   name: string;
@@ -17,23 +19,37 @@ interface CastMember {
 export default function MovieDetailPage({ params }: { params: { id: string } }) {
   const [movie, setMovie] = useState<any | null>(null);
   const [cast, setCast] = useState<CastMember[]>([]);
-
+  
+  const { navigateWithProfile, getCurrentProfileId } = useNavigation();
+  const profileId = getCurrentProfileId() || 1;
   const videosService = new VideosService();
+  
+  const { 
+    isFavorite, 
+    isAddingToFavorites, 
+    isAddingToHistory,
+    checkIsFavorite, 
+    toggleFavorite, 
+    addToHistory 
+  } = useMovieActions(profileId);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const data = await videosService.findVideoById(+params.id); // método que retorna detalhes do filme
+        const data = await videosService.findVideoById(+params.id);
         setMovie(data);
 
         // Supondo que o cast venha como array dentro do filme
         setCast(data.cast || []);
+        
+        // Verificar se o filme está nos favoritos
+        await checkIsFavorite(+params.id);
       } catch (error) {
         console.error("Erro ao carregar detalhes do filme:", error);
       }
     };
     fetchMovie();
-  }, [params.id]);
+  }, [params.id, checkIsFavorite]);
 
   if (!movie) {
     return <div className="text-white p-6">Loading...</div>;
@@ -42,7 +58,7 @@ export default function MovieDetailPage({ params }: { params: { id: string } }) 
   return (
     <div className="min-h-screen bg-[#0c0c0c] relative">
       <Image
-        src={movie.background || "/movie-detail-bg.png"}
+        src={movie.thumbnailUrl || movie.background || "/movie-detail-bg.png"}
         alt={movie.title}
         fill
         className="object-cover opacity-30"
@@ -52,11 +68,14 @@ export default function MovieDetailPage({ params }: { params: { id: string } }) 
       <div className="relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between p-6">
-          <Link href="/dashboard">
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-              <ArrowLeft className="w-6 h-6" />
-            </Button>
-          </Link>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="text-white hover:bg-white/10"
+            onClick={() => navigateWithProfile('/dashboard')}
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </Button>
         </div>
 
         <div className="px-6 pb-6">
@@ -75,13 +94,36 @@ export default function MovieDetailPage({ params }: { params: { id: string } }) 
             <p className="text-white/80 text-lg leading-relaxed">{movie.description}</p>
 
             <div className="flex space-x-4">
-              <Button className="bg-white text-black hover:bg-white/90 px-8 py-3">
+              <Button 
+                className="bg-white text-black hover:bg-white/90 px-8 py-3"
+                onClick={async () => {
+                  // Adicionar ao histórico quando começar a assistir
+                  await addToHistory(+params.id, 0);
+                  // Aqui você pode adicionar a lógica para reproduzir o vídeo
+                  console.log('Iniciando reprodução do filme:', movie.title);
+                }}
+                disabled={isAddingToHistory}
+              >
                 <Play className="w-5 h-5 mr-2" />
-                Watch now
+                {isAddingToHistory ? 'Loading...' : 'Watch now'}
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-3">
-                <Heart className="w-5 h-5 mr-2" />
-                Add favorite
+              <Button 
+                variant="outline" 
+                className={`border-white text-white hover:bg-white/10 px-8 py-3 transition-colors ${
+                  isFavorite ? 'bg-red-600/20 border-red-500 text-red-400' : ''
+                }`}
+                onClick={() => toggleFavorite(+params.id)}
+                disabled={isAddingToFavorites}
+              >
+                <Heart className={`w-5 h-5 mr-2 transition-colors ${
+                  isFavorite ? 'fill-red-500 text-red-500' : ''
+                }`} />
+                {isAddingToFavorites 
+                  ? 'Loading...' 
+                  : isFavorite 
+                    ? 'Remove favorite' 
+                    : 'Add favorite'
+                }
               </Button>
             </div>
           </div>

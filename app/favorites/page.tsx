@@ -4,11 +4,13 @@ import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { Heart, Star } from "lucide-react"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useFavorites } from "@/hooks/use-favorites"
+import { useNavigation } from "@/hooks/use-navigation"
 
-export default function FavoritesPage() {
-  const profileId = 1; 
+function FavoritesContent() {
+  const { getCurrentProfileId } = useNavigation()
+  const profileId = getCurrentProfileId() || 1; 
   const { favorites, loadFavorites, removeFavorite, loading } = useFavorites();
   const [removing, setRemoving] = useState<number | null>(null);
 
@@ -68,5 +70,26 @@ export default function FavoritesPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function FavoritesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0c0c0c]">
+        <Sidebar />
+        <Header />
+        <main className="ml-16 pt-16 p-8">
+          <div className="space-y-8">
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">Your favorites</h1>
+              <p className="text-[#787878]">Loading...</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    }>
+      <FavoritesContent />
+    </Suspense>
   )
 }

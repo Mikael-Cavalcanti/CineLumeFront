@@ -7,12 +7,14 @@ import { Home, Film, Settings, LogOut, History } from "lucide-react"
 import Play from "@/components/icons/play.svg"
 import { cn } from "@/lib/utils"
 import { AuthService } from "@/services/auth/auth.service"
+import { useNavigation } from "@/hooks/use-navigation"
+import { Suspense } from "react"
 
 
 const mainNavigation = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Favorites", href: "/favorites", icon: CiStar },
-  { name: "Recently", href: "/recently-watched", icon: Film },
+  // { name: "Recently", href: "/recently-watched", icon: Film },
   { name: "History", href: "/history", icon: History },
   { name: "Channels", href: "/channels", icon: Play },
 ]
@@ -22,10 +24,11 @@ const bottomUtilities = [
   { name: "Logout", href: "#", icon: LogOut, isLogout: true },
 ]
 
-export function Sidebar() {
+function SidebarContent() {
   const pathname = usePathname()
   const router = useRouter()
   const authService = new AuthService()
+  const { navigateWithProfile } = useNavigation()
 
   const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -45,11 +48,14 @@ export function Sidebar() {
       {/* Top Spacer */}
       <div className="flex-shrink-0">
         {/* Logo */}
-        <Link href="/dashboard" className="block">
+        <button 
+          onClick={() => navigateWithProfile('/dashboard')}
+          className="block"
+        >
           <div className="w-10 h-10 bg-[#feb625] rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-200">
             <span className="text-black font-bold text-lg">C</span>
           </div>
-        </Link>
+        </button>
       </div>
 
       {/* Main Navigation - Centered */}
@@ -57,9 +63,9 @@ export function Sidebar() {
         {mainNavigation.map((item) => {
           const isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/")
           return (
-            <Link
+            <button
               key={item.name}
-              href={item.href}
+              onClick={() => navigateWithProfile(item.href)}
               className={cn(
                 "p-3 rounded-lg transition-all duration-300 group relative transform",
                 isActive
@@ -75,7 +81,7 @@ export function Sidebar() {
                 {item.name}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-[#1d1d1d] rotate-45 border-l border-b border-[#333]"></div>
               </div>
-            </Link>
+            </button>
           )
         })}
       </nav>
@@ -110,9 +116,9 @@ export function Sidebar() {
 
           // Regular navigation item
           return (
-            <Link
+            <button
               key={item.name}
-              href={item.href}
+              onClick={() => navigateWithProfile(item.href)}
               className={cn(
                 "p-3 rounded-lg transition-all duration-300 group relative transform",
                 isActive
@@ -128,10 +134,32 @@ export function Sidebar() {
                 {item.name}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 rotate-45 border-l border-b bg-[#1d1d1d] border-[#333]"></div>
               </div>
-            </Link>
+            </button>
           )
         })}
       </div>
     </div>
+  )
+}
+
+export function Sidebar() {
+  return (
+    <Suspense fallback={
+      <div className="fixed left-0 top-0 h-screen w-16 bg-[#0D0D0D] border-r border-[#1d1d1d] flex flex-col justify-between items-center py-6 z-50">
+        <div className="flex-shrink-0">
+          <div className="w-10 h-10 bg-[#feb625] rounded-lg flex items-center justify-center">
+            <span className="text-black font-bold text-lg">C</span>
+          </div>
+        </div>
+        <nav className="flex flex-col space-y-6 flex-1 justify-center">
+          {/* Loading skeleton */}
+        </nav>
+        <div className="flex flex-col space-y-4 flex-shrink-0">
+          {/* Loading skeleton */}
+        </div>
+      </div>
+    }>
+      <SidebarContent />
+    </Suspense>
   )
 }

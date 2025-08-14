@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
 import { Heart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { RecentlyWatchedService } from "@/services/recently-watched/recentlyWatched.service";
+import { useNavigation } from "@/hooks/use-navigation";
 
-export default function RecentlyWatchedPage({ profileId }: { profileId: number }) {
+function RecentlyWatchedContent() {
+  const { getCurrentProfileId } = useNavigation();
+  const profileId = getCurrentProfileId() || 1;
   const [recentlyWatched, setRecentlyWatched] = useState<any[]>([]);
   const service = new RecentlyWatchedService();
 
@@ -72,5 +75,26 @@ export default function RecentlyWatchedPage({ profileId }: { profileId: number }
         </div>
       </main>
     </div>
+  );
+}
+
+export default function RecentlyWatchedPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0D0D0D]">
+        <Sidebar />
+        <Header />
+        <main className="ml-16 pt-16 p-8">
+          <div className="space-y-8">
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">Recently watched</h1>
+              <p className="text-[#787878]">Loading...</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    }>
+      <RecentlyWatchedContent />
+    </Suspense>
   );
 }

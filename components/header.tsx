@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { Search, Bell, X } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -10,14 +10,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ProfileService } from "@/services/profile/profile.service"
 import { Profile } from "@/interfaces/profile"
+import { useNavigation } from "@/hooks/use-navigation"
 
-export function Header() {
+function HeaderContent() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
   const router = useRouter()
   const pathname = usePathname()
   const profileService = new ProfileService()
+  const { navigateWithProfile, getCurrentProfileId } = useNavigation()
 
   useEffect(() => {
     const fetchSelectedProfile = async () => {
@@ -40,15 +42,19 @@ export function Header() {
       // If already on account page, go back to previous page
       router.back()
     } else {
-      // Navigate to account page
-      router.push('/account')
+      // Navigate to account page with profile
+      navigateWithProfile('/account')
     }
   }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+      const profileId = getCurrentProfileId()
+      const searchUrl = profileId 
+        ? `/search?q=${encodeURIComponent(searchQuery.trim())}&profileId=${profileId}`
+        : `/search?q=${encodeURIComponent(searchQuery.trim())}`
+      router.push(searchUrl)
       setIsSearchOpen(false)
       setSearchQuery("")
     }
@@ -60,7 +66,11 @@ export function Header() {
 
     // Navigate to search page as user types
     if (value.trim()) {
-      router.push(`/search?q=${encodeURIComponent(value.trim())}`)
+      const profileId = getCurrentProfileId()
+      const searchUrl = profileId 
+        ? `/search?q=${encodeURIComponent(value.trim())}&profileId=${profileId}`
+        : `/search?q=${encodeURIComponent(value.trim())}`
+      router.push(searchUrl)
     }
   }
 
@@ -143,5 +153,25 @@ export function Header() {
         </Avatar>
       </div>
     </header>
+  )
+}
+
+export function Header() {
+  return (
+    <Suspense fallback={
+      <header className="fixed top-0 left-16 right-0 h-16 bg-[#0c0c0c]/95 backdrop-blur-sm flex items-center justify-end px-6 z-40">
+        <div className="flex items-center space-x-4">
+          <Button variant="ghost" size="icon" className="text-[#787878]">
+            <Search className="w-5 h-5" />
+          </Button>
+          <Button variant="ghost" size="icon" className="text-[#787878]">
+            <Bell className="w-5 h-5" />
+          </Button>
+          <div className="w-8 h-8 bg-[#1d1d1d] rounded-full"></div>
+        </div>
+      </header>
+    }>
+      <HeaderContent />
+    </Suspense>
   )
 }
