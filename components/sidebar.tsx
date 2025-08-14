@@ -7,7 +7,6 @@ import { CiStar } from "react-icons/ci"
 import Filmstrip from "@/components/icons/filmstrip.svg"
 import Home from "@/components/icons/home.svg"
 import Play from "@/components/icons/play.svg"
-import { MdOutlineCalendarMonth } from "react-icons/md"
 import { cn } from "@/lib/utils"
 import { AuthService } from "@/services/auth/auth.service"
 
@@ -15,7 +14,6 @@ const mainNavigation = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Favorites", href: "/favorites", icon: CiStar },
   { name: "Catalog", href: "/recently-watched", icon: Filmstrip },
-  { name: "Comming", href: "/my-list", icon: MdOutlineCalendarMonth },
   { name: "Play", href: "/channels", icon: Play },
 ]
 

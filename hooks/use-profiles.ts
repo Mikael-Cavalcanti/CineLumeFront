@@ -57,8 +57,8 @@ export const useProfiles = () => {
         // Store selected profile in localStorage
         localStorage.setItem('selectedProfileId', profileId.toString())
         
-        // Navigate to dashboard
-        window.location.href = '/dashboard'
+        // Navigate to dashboard with profile ID in URL
+        window.location.href = `/dashboard?profileId=${profileId}`
     }
 
     return {
