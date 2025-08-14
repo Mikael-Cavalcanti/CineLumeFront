@@ -7,7 +7,6 @@ import { Home, Film,Settings, LogOut } from "lucide-react"
 import Play from "@/components/icons/play.svg"
 import { cn } from "@/lib/utils"
 import { AuthService } from "@/services/auth/auth.service"
-import Image from "next/image"
 
 
 const mainNavigation = [
@@ -46,15 +45,8 @@ export function Sidebar() {
       <div className="flex-shrink-0">
         {/* Logo */}
         <Link href="/dashboard" className="block">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-200">
-            <span className="text-black font-bold text-lg">
-              <Image
-                src="/cinelume-logo.png"
-                alt="Logo"
-                fill
-                className="w-10 h-10"
-              />
-            </span>
+          <div className="w-10 h-10 bg-[#feb625] rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-200">
+            <span className="text-black font-bold text-lg">C</span>
           </div>
         </Link>
       </div>
