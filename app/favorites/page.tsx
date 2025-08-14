@@ -37,7 +37,7 @@ function FavoritesContent() {
               <div key={`${fav.profileId}-${fav.videoId}`} className="group cursor-pointer">
                 <div className="relative aspect-[2/3] bg-[#1d1d1d] rounded-lg overflow-hidden mb-3">
                   <Image
-                    src={fav.video?.image || "/placeholder.svg"}
+                    src={fav.video?.image || fav.video?.thumbnailUrl || "/placeholder.svg"}
                     alt={fav.video?.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform"
