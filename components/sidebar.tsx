@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { CiStar } from "react-icons/ci"
-import { Home, Film,Settings, LogOut } from "lucide-react"
+import { Home, Film, Settings, LogOut, History } from "lucide-react"
 import Play from "@/components/icons/play.svg"
 import { cn } from "@/lib/utils"
 import { AuthService } from "@/services/auth/auth.service"
@@ -13,6 +13,7 @@ const mainNavigation = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Favorites", href: "/favorites", icon: CiStar },
   { name: "Recently", href: "/recently-watched", icon: Film },
+  { name: "History", href: "/history", icon: History },
   { name: "Channels", href: "/channels", icon: Play },
 ]
 
