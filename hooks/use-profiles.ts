@@ -42,27 +42,7 @@ export const useProfiles = () => {
             const data = await profileService.getProfiles()
             console.log('Profiles recebidos:', data)
             
-            // Update profiles without avatars with random images
-            const updatedProfiles = await Promise.all(
-                data.map(async (profile) => {
-                    if (!profile.avatarUrl) {
-                        try {
-                            const randomAvatar = getRandomAvatar()
-                            const updatedProfile = await profileService.updateProfile(profile.id, {
-                                avatarUrl: randomAvatar
-                            })
-                            console.log(`Avatar atualizado para perfil ${profile.name}: ${randomAvatar}`)
-                            return updatedProfile
-                        } catch (err) {
-                            console.error(`Erro ao atualizar avatar do perfil ${profile.name}:`, err)
-                            return profile
-                        }
-                    }
-                    return profile
-                })
-            )
-            
-            setProfiles(updatedProfiles)
+            setProfiles(data)
         } catch (err: any) {
             console.error('Erro ao buscar profiles:', err)
             console.error('Status da resposta:', err?.response?.status)

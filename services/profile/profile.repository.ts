@@ -18,8 +18,8 @@ export class ProfileRepository {
         return data;
     }
 
-    async updateProfile(id: number, dto: UpdateProfileDto): Promise<Profile> {
-        const {data} = await api.patch(`/profile/update/${id}`, dto);
+    async updateProfile(dto: UpdateProfileDto): Promise<Profile> {
+        const {data} = await api.patch(`/profile/update`, dto);
         return data;
     }
 

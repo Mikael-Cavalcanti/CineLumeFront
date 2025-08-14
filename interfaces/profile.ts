@@ -6,6 +6,7 @@ export interface CreateProfileDto {
 }
 
 export interface UpdateProfileDto extends Partial<CreateProfileDto> {
+    id: number;
 }
 
 export interface Profile {

@@ -20,8 +20,8 @@ export class ProfileService {
         return this.repository.getProfile(id);
     }
 
-    async updateProfile(id: number, dto: UpdateProfileDto): Promise<Profile> {
-        return this.repository.updateProfile(id, dto);
+    async updateProfile(dto: UpdateProfileDto): Promise<Profile> {
+        return this.repository.updateProfile(dto);
     }
 
     async deleteProfile(id: number): Promise<Profile> {

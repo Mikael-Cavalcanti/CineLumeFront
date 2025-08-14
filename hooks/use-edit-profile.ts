@@ -73,11 +73,12 @@ export const useEditProfile = () => {
             if (profileId) {
                 // Update existing profile
                 const updateData: UpdateProfileDto = {
+                    id: parseInt(profileId),
                     name: name.trim(),
                     isKidProfile,
                     avatarUrl: avatarUrl || undefined
                 }
-                await profileService.updateProfile(parseInt(profileId), updateData)
+                await profileService.updateProfile(updateData)
             } else {
                 // Create new profile - get user info first
                 const user = await userService.getMe()
